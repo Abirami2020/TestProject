@@ -11,7 +11,7 @@ import java.util.*;
 public class CodingTest {
 	
 	public static List<Stock> read (String[] strArr){		
-		List<Stock> stock_list = new ArrayList();		
+		List<Stock> stock_list = new ArrayList<Stock>();		
 		for(int i =0;i<strArr.length;i++){			
 			String delimiter = ",";
 			String line = null;
@@ -25,20 +25,9 @@ public class CodingTest {
 		  try {
 			  while((line = br.readLine()) != null){				
 					String[] content = line.split(delimiter);					
-					//System.out.print(content[0]+" "+content[3]+" "+content[4]+" "+content[10]);
-					//Double data_range = Double.parseDouble(content[3])-Double.parseDouble(content[4]);
-					//String temp = data_range+"";
 					String[] attributes = {content[0],content[3],content[4],content[10]};
 					Stock stock = createStock(attributes);
 					List<Stock> list_stock = new ArrayList<Stock>();
-					/*if(!mplst.containsKey(content[0])){
-						list_stock = mplst.get(content[0]);
-						list_stock.add(stock);
-						mplst.put(content[0],list_stock);
-					}
-					else{
-						mplst.put(content[0],(List<Stock>) stock);
-					}*/
 					stock_list.add(stock);
 					System.out.println();												
 				}
@@ -58,7 +47,7 @@ public class CodingTest {
 		String high = CSVdata[1];
 		String low = CSVdata[2];
 		String time_stamp = CSVdata[3];
-		//String dat_ran = CSVdata[4];
+		
 		
 		return new Stock(symbol,high,low,time_stamp);
 	}
@@ -74,18 +63,14 @@ public class CodingTest {
 	    
 	    List<Stock> stocks = read(list);
 	     
-	   int file_count = 0;
+	   
 	   for(int i=0;i<stocks.size();i++){
-		   file_count++;
+		   
 		   System.out.print(stocks.get(i).getSymbol()+" "+stocks.get(i).getTimeStamp()+" ");
 		   System.out.print(stocks.get(i).getDataRange());
 		   System.out.println();
 	   }
-	   System.out.println("Read "+file_count+"  successfully");
-	    /*  for(Stock s :stocks ){
-	    	System.out.println(s);
-	    }*/
-	   
+	  	   	   
 	   File csvFile = new File("C:\\Users\\Hari\\Desktop\\Abi\\iConnect\\output.csv");
 	   PrintWriter out = new PrintWriter(csvFile); 
 	      
@@ -93,8 +78,7 @@ public class CodingTest {
 	   	out.println(s.getSymbol()+" "+s.getTimeStamp()+" "+s.getDataRange());
 	   }
 	   
-	   System.out.println("Created Successfully");
-	   out.close();
+	    out.close();
 	}
 }
 
@@ -105,8 +89,7 @@ class Stock{
 	 String high;
 	 String low;
 	 String time_stamp;
-	// String temp ;
-	 
+		 
 	public Stock(){
 		this.symbol = null;
 		this.high = null;
@@ -119,7 +102,7 @@ class Stock{
 		this.high = high;
 		this.low = low;
 		this.time_stamp = time_stamp;
-		//this.temp = temp;
+		
 	}
 	
 	public String getSymbol(){
