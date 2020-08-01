@@ -2,6 +2,7 @@ package Demo;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -74,25 +75,36 @@ public class CodingTest {
 	}
 
 	public static void main(String[] args) throws ParseException, IOException {
+					
+		Properties prop = new Properties();
+		FileInputStream fis = null;
 		
-			
-		String file1 = "C:/Users/Hari/Desktop/Abi/iConnect/cm29JAN2020bhav.csv";
-		String file2 = "C:/Users/Hari/Desktop/Abi/iConnect/cm30JAN2020bhav.csv";
-		String file3 = "C:/Users/Hari/Desktop/Abi/iConnect/cm31JAN2020bhav.csv";
+		if(args.length > 0 )
+		{
+			System.out.println("Properties file provided " + args[0]);
+			fis = new FileInputStream(""+args[0]+""); 
+			prop.load(fis);
+		}
+		else
+		{
+			System.out.println("Properties file Not Provided");
+			System.exit(1);
+		}
 		
-		String[] list = {file1,file2,file3};	
-		 File csvFile = new File("C:\\Users\\Hari\\Desktop\\Abi\\iConnect\\output.csv"); 
-		 PrintWriter out = new PrintWriter(csvFile); 
-		 out.print("Symbol");
-		 out.print("Time_stamp");
-		 out.print("Data range");
-		 out.print("Running Average");
-		 out.println();
-		 
-		Map<String,List<Stock>> stocksMap = read(list);     
+		String[] filelist = prop.getProperty("INPUTFILE_LIST").split("\\|");
+		File outputFile = new File(prop.getProperty("OUTPUTFILE_NAME")); 
+		PrintWriter out = new PrintWriter(outputFile); 
+		out.println("STOCK_SYMBOL"+","+"TIMESTAMP"+","+"DATARANGE"+","+ "RUNNING_AVERGAE");
+		
+		
+		Map<String,List<Stock>> stocksMap = read(filelist).entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));     
 		Set<String> stockList =stocksMap.keySet();
 		Double runninAvergae = 0.0;
 		List<Date> sortedList = dateList.stream().sorted().collect(Collectors.toList());
+		
 		for(String stockName : stockList )
 		{
 			runninAvergae = 0.0;
